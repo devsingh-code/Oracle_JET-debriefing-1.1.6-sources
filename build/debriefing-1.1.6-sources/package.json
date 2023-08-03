@@ -1,0 +1,47 @@
+{
+  "name": "debriefing",
+  "author": "Oracle Corporation (https://oracle.com)",
+  "version": "1.1.6",
+  "description": "Debriefing Plugin for OFS",
+  "ofscMetadata": {
+    "originalFilesChecksum": "63cb381e545fb11c44aa2b3d59def0bb33e8d120b9eeb9c12dfd83066668abf2",
+    "originalCommitHash": ".DIRTY"
+  },
+  "license": "UPL",
+  "dependencies": {
+    "@oracle/oraclejet": "11.1.12"
+  },
+  "devDependencies": {
+    "@oracle/grunt-oraclejet": "6.2.0",
+    "@oracle/oraclejet-tooling": "11.1.1",
+    "chai": "4.3.7",
+    "chai-as-promised": "7.1.1",
+    "cssmin": "0.4.3",
+    "grunt": "^1.5.3",
+    "grunt-bumpup": "0.6.3",
+    "grunt-contrib-clean": "2.0.1",
+    "grunt-contrib-compress": "2.0.0",
+    "grunt-contrib-copy": "1.0.0",
+    "grunt-processhtml": "0.4.3",
+    "i": "0.3.7",
+    "karma": "6.4.1",
+    "karma-chai": "0.1.0",
+    "karma-chai-plugins": "0.9.0",
+    "karma-chai-sinon": "0.1.5",
+    "karma-coverage": "2.2.0",
+    "karma-firefox-launcher": "2.1.2",
+    "karma-mocha": "2.0.1",
+    "karma-requirejs": "1.1.0",
+    "karma-sinon": "1.0.5",
+    "karma-spec-reporter": "0.0.36",
+    "load-grunt-config": "4.0.1",
+    "mocha": "10.2.0",
+    "mocha-junit-reporter": "2.2.0",
+    "mocha-multi-reporters": "1.5.1",
+    "nyc": "15.1.0",
+    "puppeteer": "19.4.0",
+    "sinon": "15.0.1",
+    "sinon-chai": "3.7.0",
+    "xmlbuilder": "15.1.1"
+  }
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<!--
+Oracle Field Service Debriefing plugin
+
+Copyright (c) 2023, Oracle and/or its affiliates.
+Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+-->
+
+<html lang="en-us" manifest="manifest.appcache">
+
+<head>
+    <title>Plugin Debriefing</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1">
+    <link rel="icon" href="css/images/favicon.ico" type="image/x-icon"/>
+
+    <meta name="version" content="1.1.6">
+    <meta name="repo-version" content=".DIRTY">
+    <meta name="repo-files-checksum" content="e923b6ec4724407d5369777d712ceb7fb0645187789e37f976c1b41480ff752f">
+    <meta name="original-repo-version" content=".DIRTY">
+    <meta name="original-repo-files-checksum" content="63cb381e545fb11c44aa2b3d59def0bb33e8d120b9eeb9c12dfd83066668abf2">
+
+    <!-- This is the main css file for the default Redwood theme -->
+
+    <link rel="stylesheet" href="https://static.oracle.com/cdn/jet/11.0.0/default/css/redwood/oj-redwood-min.css">
+
+    <!-- This is where you would add any app specific styling -->
+    <link rel="stylesheet" href="app.css">
+   <link rel="stylesheet" id="oraclefont" href="https://static.oracle.com/cdn/fnd/gallery/2210.1.0/OracleFont/OracleFont.min.css">
+   <link rel="stylesheet" id="uxiconfont" href="https://static.oracle.com/cdn/fnd/gallery/2210.1.0/images/iconfont/ojuxIconFont.min.css">
+</head>
+<body class="oj-web-applayout-body" style="background-color: #fafafa;">
+
+<div id="globalBody">
+    <div role="main" data-bind="ojModule: router.moduleConfig"></div>
+    <oj-dialog id="alertDialog" class="outbound-dialog min-height-body" cancel-behavior="none" drag-affordance="none" aria-describedby="desc">
+        <div class="oj-sm-flex-wrap-nowrap oj-flex" slot="header">
+            <div class="oj-flex oj-sm-align-items-flex-start oj-sm-flex-wrap-nowrap oj-sm-justify-content-space-around oj-flex-item oj-sm-flex-initial">
+                <oj-bind-text class="oj-flex-item oj-sm-flex-initial outbound-dialog-header">
+                    <oj-bind-text value="[[ dialogHeading ]]"></oj-bind-text>
+                </oj-bind-text>
+            </div>
+        </div>
+        <div slot="body">
+            <oj-bind-text value="[[ dialogMessage ]]"></oj-bind-text>
+        </div>
+        <div slot="footer">
+            <div class="outbound-form-footer">
+                <div>
+                    <oj-button id="okButton" on-oj-action="[[closeDialog.bind($data)]]">OK</oj-button>
+                </div>
+            </div>
+        </div>
+    </oj-dialog>
+</div>
+
+<script src="html2pdf.bundle.js"></script>
+<script src="https://static.oracle.com/cdn/jet/11.0.0/3rdparty/require/require.js"></script>
+<script src="main.js"></script>
+</body>
+
+</html>

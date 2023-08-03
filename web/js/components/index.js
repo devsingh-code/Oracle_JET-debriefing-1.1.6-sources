@@ -1,0 +1,1 @@
+define(["./part-preview-component/part-preview-component"],()=>{});

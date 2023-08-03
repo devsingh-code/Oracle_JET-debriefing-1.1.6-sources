@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<!--
+Oracle Field Service Debriefing plugin
+
+Copyright (c) 2023, Oracle and/or its affiliates.
+Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+-->
+
+<!-- build:[manifest] manifest.appcache -->
+<html lang="en-us">
+<!-- /build -->
+
+<head>
+    <title>Plugin Debriefing</title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1">
+    <link rel="icon" href="css/images/favicon.ico" type="image/x-icon"/>
+
+    <!-- build:template
+    <meta name="version" content="<%= getVersion() %>">
+    <meta name="repo-version" content="<%= commitHash %>">
+    <meta name="repo-files-checksum" content="<%= filesChecksum %>">
+    <meta name="original-repo-version" content="<%= originalCommitHash %>">
+    <meta name="original-repo-files-checksum" content="<%= originalFilesChecksum %>">
+    /build -->
+
+    <!-- This is the main css file for the default Redwood theme -->
+
+    <!-- build:css https://static.oracle.com/cdn/jet/11.0.0/default/css/redwood/oj-redwood-min.css -->
+<!-- injector:theme -->
+<link rel="stylesheet" href="css/alta/11.1.12/web/alta.min.css" id="css" />
+<!-- endinjector -->
+    <!-- /build -->
+
+    <!-- This is where you would add any app specific styling -->
+    <!-- build:css app.css -->
+    <link rel="stylesheet" href="css/app.css" type="text/css"/>
+   <!-- /build -->
+   <link rel="stylesheet" id="oraclefont" href="https://static.oracle.com/cdn/fnd/gallery/2210.1.0/OracleFont/OracleFont.min.css">
+   <link rel="stylesheet" id="uxiconfont" href="https://static.oracle.com/cdn/fnd/gallery/2210.1.0/images/iconfont/ojuxIconFont.min.css">
+</head>
+<body class="oj-web-applayout-body" style="background-color: #fafafa;">
+
+<div id="globalBody">
+    <div role="main" data-bind="ojModule: router.moduleConfig"></div>
+    <oj-dialog id="alertDialog" class="outbound-dialog min-height-body" cancel-behavior="none" drag-affordance="none" aria-describedby="desc">
+        <div class="oj-sm-flex-wrap-nowrap oj-flex" slot="header">
+            <div class="oj-flex oj-sm-align-items-flex-start oj-sm-flex-wrap-nowrap oj-sm-justify-content-space-around oj-flex-item oj-sm-flex-initial">
+                <oj-bind-text class="oj-flex-item oj-sm-flex-initial outbound-dialog-header">
+                    <oj-bind-text value="[[ dialogHeading ]]"></oj-bind-text>
+                </oj-bind-text>
+            </div>
+        </div>
+        <div slot="body">
+            <oj-bind-text value="[[ dialogMessage ]]"></oj-bind-text>
+        </div>
+        <div slot="footer">
+            <div class="outbound-form-footer">
+                <div>
+                    <oj-button id="okButton" on-oj-action="[[closeDialog.bind($data)]]">OK</oj-button>
+                </div>
+            </div>
+        </div>
+    </oj-dialog>
+</div>
+
+<!-- build:js html2pdf.bundle.js -->
+<script type="text/javascript" src="js/vendor/html2pdf/html2pdf.bundle.js"></script>
+<!-- /build -->
+<!-- build:js https://static.oracle.com/cdn/jet/11.0.0/3rdparty/require/require.js -->
+<script type="text/javascript" src="js/libs/require/require.js"></script>
+<!-- /build -->
+<!-- build:js main.js -->
+<script type="text/javascript" src="js/main.js"></script>
+<!-- /build -->
+</body>
+
+</html>

@@ -1,0 +1,154 @@
+<!--
+Oracle Field Service Debriefing plugin
+
+Copyright (c) 2023, Oracle and/or its affiliates.
+Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+-->
+<div class="oj-flex oj-md-padding-4x-vertical plugin-main-container charges-main-container">
+  <div class="oj-sm-12 oj-flex-item oj-sm-padding-2x-horizontal">
+    <h3>Service Checklist</h3>
+
+    <div class="oj-sm-padding-2x-vertical oj-panel demo-myouterpanel">
+      <!-- Asset header Section-->
+      <div class="oj-sm-padding-2x-vertical oj-panel demo-mypanel">
+        <div class="demo-flex-display">
+          <div class="">
+            <oj-list-view
+              id="listview"
+              aria-label="service-checklist_1"
+              data="[[assetDataProvider]]"
+              class="oj-listview-full-width"
+              display="list"
+            >
+              <template slot="itemTemplate" data-oj-as="item">
+                <li>
+                  <oj-c-list-item-layout class="oj-flex oj-sm-flex-direction-column">
+                    <span
+                      slot="leading"
+                      class="oj-typography-body-md oj-text-color-primary oj-flex-item oj-sm-padding-2x-horizontal"
+                      ><oj-bind-text class="oj-typography-semi-bold">Account:</oj-bind-text>
+
+                      <oj-bind-text value="[[item.data.account]]"></oj-bind-text
+                    ></span>
+                    <span slot="leading" class="oj-typography-body-md oj-text-color-primary oj-sm-padding-2x-horizontal"
+                      ><oj-bind-text class="oj-typography-semi-bold">Site:</oj-bind-text>
+                      <oj-bind-text value="[[item.data.site]]"></oj-bind-text>
+                    </span>
+                    <span slot="leading" class="oj-typography-body-md oj-text-color-primary oj-sm-padding-2x-horizontal"
+                      ><oj-bind-text class="oj-typography-semi-bold">Reference Number:</oj-bind-text>
+                      <oj-bind-text value="[[item.data.refno]]"></oj-bind-text>
+                    </span>
+                  </oj-c-list-item-layout>
+                </li>
+              </template>
+            </oj-list-view>
+          </div>
+        </div>
+      </div>
+      <!--Main Section Part-->
+      <div class="oj-sm-padding-2x-vertical oj-panel demo-mypanel">
+        <div class="demo-flex-display">
+          <div class="oj-flex oj-sm-flex-items-initial">
+            <oj-list-view
+              id="mainSectionListView"
+              aria-label="service-checklist_2"
+              data="[[allAssetsDataProvider]]"
+              gridlines.item="visibleExceptLast"
+              class="oj-listview-full-width oj-sm-padding"
+              display="list"
+            >
+              <template slot="itemTemplate" data-oj-as="item">
+                <li>
+                  <oj-c-list-item-layout
+                    class="oj-flex oj-sm-flex-items-initial oj-sm-flex-wrap-nowrap oj-sm-padding-2x-horizontal oj-sm-padding-2x-vertical oj-lg-padding-2x-horizontal oj-lg-padding-2x-vertical oj-md-padding-2x-vertical oj-md-padding-2x-horizontal"
+                  >
+                    <div class="oj-flex-item oj-sm-horizontal oj-typography-semi-bold oj-sm-padding-2x-horizontal">
+                      <span :class="[[assetClass]]">
+                        <oj-bind-text value="[[item.data.count]]"></oj-bind-text>
+                      </span>
+                    </div>
+                    <div class="oj-flex oj-sm-flex-direction-column">
+                      <span
+                        slot="leading"
+                        class="oj-typography-body-sm oj-text-color-primary oj-flex-item oj-sm-padding-2x-horizontal"
+                        ><oj-bind-text class="oj-typography-semi-bold">Model:</oj-bind-text>
+
+                        <oj-bind-text value="[[item.data.model]]"></oj-bind-text
+                      ></span>
+                      <span
+                        slot="leading"
+                        class="oj-typography-body-sm oj-text-color-primary oj-sm-padding-2x-horizontal"
+                        ><oj-bind-text class="oj-typography-semi-bold">Serial No: </oj-bind-text>
+                        <oj-bind-text value="[[item.data.serialNo]]"></oj-bind-text>
+                      </span>
+                      <span
+                        slot="leading"
+                        class="oj-typography-body-sm oj-text-color-primary oj-sm-padding-2x-horizontal"
+                        ><oj-bind-text class="oj-typography-semi-bold">Warranty Status: </oj-bind-text>
+                        <oj-bind-text value="[[item.data.wStatus]]"></oj-bind-text>
+                      </span>
+                      <span class="oj-typography-body-sm oj-text-color-primary oj-flex-item oj-sm-padding-2x-horizontal"
+                        ><oj-bind-text class="oj-typography-semi-bold">Block: </oj-bind-text>
+
+                        <oj-bind-text value="[[item.data.block]]"></oj-bind-text
+                      ></span>
+                      <span class="oj-typography-body-sm oj-text-color-primary oj-sm-padding-2x-horizontal"
+                        ><oj-bind-text class="oj-typography-semi-bold">Floor: </oj-bind-text>
+                        <oj-bind-text value="[[item.data.floor]]"></oj-bind-text>
+                      </span>
+                      <span class="oj-typography-body-sm oj-text-color-primary oj-sm-padding-2x-horizontal"
+                        ><oj-bind-text class="oj-typography-semi-bold">Room:</oj-bind-text>
+                        <oj-bind-text value="[[item.data.room]]"></oj-bind-text>
+                      </span>
+                      <span class="oj-typography-body-sm oj-text-color-primary oj-flex-item oj-sm-padding-2x-horizontal"
+                        ><oj-bind-text class="oj-typography-semi-bold">Machine No: </oj-bind-text>
+
+                        <oj-bind-text value="[[item.data.machineNo]]"></oj-bind-text
+                      ></span>
+                      <span class="oj-typography-body-sm oj-text-color-primary oj-sm-padding-2x-horizontal"
+                        ><oj-bind-text class="oj-typography-semi-bold">Asset Type: </oj-bind-text>
+                        <oj-bind-text value="[[item.data.assetType]]"></oj-bind-text>
+                      </span>
+                      <span class="oj-typography-body-sm oj-text-color-primary oj-sm-padding-2x-horizontal"
+                        ><oj-bind-text class="oj-typography-semi-bold">Issue Type:</oj-bind-text>
+                        <oj-bind-text value="[[item.data.issueType]]"></oj-bind-text>
+                      </span>
+                      <span class="oj-typography-body-sm oj-text-color-primary oj-flex-item oj-sm-padding-2x-horizontal"
+                        ><oj-bind-text class="oj-typography-semi-bold">Service Type:</oj-bind-text>
+
+                        <oj-bind-text value="[[item.data.serviceType]]"></oj-bind-text
+                      ></span>
+                      <span class="oj-typography-body-sm oj-text-color-primary oj-sm-padding-2x-horizontal"
+                        ><oj-bind-text class="oj-typography-semi-bold">Remarks:</oj-bind-text>
+                        <oj-bind-text value="[[item.data.remarks]]"></oj-bind-text>
+                      </span>
+
+                      <div class="oj-flex oj-sm-flex-items-initial oj-sm-justify-center oj-sm-flex-wrap-nowrap">
+                        <div class="oj-flex-item">
+                          <oj-button class="oj-button-sm" chroming="danger">
+                            <span>
+                              <oj-bind-text>Asset Details</oj-bind-text>
+                            </span>
+                          </oj-button>
+                          <oj-button class="oj-button-sm" chroming="callToAction">
+                            <span>
+                              <oj-bind-text>Service Checklist</oj-bind-text>
+                            </span>
+                          </oj-button>
+                          <oj-button class="oj-button-sm" chroming="solid" display="icons">
+                            <span slot="startIcon" class="oj-ux-ico-clock-history"> </span>
+                            <oj-bind-text value="Service History"></oj-bind-text>
+                          </oj-button>
+                        </div>
+                      </div>
+                    </div>
+                  </oj-c-list-item-layout>
+                </li>
+              </template>
+            </oj-list-view>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

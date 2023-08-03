@@ -1,0 +1,1 @@
+define([],()=>{const e={offsetHeightWithMargin:e=>{const t=e.offsetHeight,o=getComputedStyle(e);return t+(parseInt(o.marginTop)+parseInt(o.marginBottom))},insertHTMLBeforeElement:(e,t)=>t.insertAdjacentHTML("beforebegin",e),resetScrolling:()=>{window.scrollTo(document.body.scrollLeft,document.body.scrollTop)}};return e});

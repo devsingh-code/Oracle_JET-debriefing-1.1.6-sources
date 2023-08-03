@@ -1,0 +1,1 @@
+define([],()=>{return class{constructor(e){this.pageHeight=e}remainingPageHeight(e){return e%this.pageHeight}isExceedPageHeight(e){return e>this.pageHeight}}});

@@ -1,0 +1,1 @@
+define([],()=>{"use strict";return class{constructor(s,e){this.heading=s,this.message=e}}});
