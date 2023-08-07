@@ -4,7 +4,7 @@ Oracle Field Service Debriefing plugin
 Copyright (c) 2023, Oracle and/or its affiliates.
 Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 -->
-<div class="oj-flex oj-md-padding-4x-vertical plugin-main-container charges-main-container">
+<div class="oj-md-padding-4x-vertical plugin-main-container charges-main-container">
   <div class="oj-sm-12 oj-flex-item oj-sm-padding-2x-horizontal">
     <h3>Service Checklist</h3>
 
@@ -46,7 +46,7 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         </div>
       </div>
       <!--Main Section Part-->
-      <div class="oj-sm-padding-2x-vertical oj-panel demo-mypanel">
+      <div id="mainSectionPanel" class="oj-sm-padding-2x-vertical oj-panel demo-mypanel" +[[mainSectionClass]]>
         <div class="demo-flex-display">
           <div class="oj-flex oj-sm-flex-items-initial">
             <oj-list-view
@@ -123,10 +123,12 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                         <oj-bind-text value="[[item.data.remarks]]"></oj-bind-text>
                       </span>
 
-                      <div class="oj-flex oj-sm-flex-items-initial oj-sm-justify-center oj-sm-flex-wrap-nowrap">
+                      <div
+                        class="oj-flex oj-sm-flex-items-initial oj-sm-justify-center oj-sm-flex-wrap-nowrap oj-sm-padding-2x-vertical oj-md-padding-2x-vertical"
+                      >
                         <div class="oj-flex-item">
                           <oj-button class="oj-button-sm" chroming="danger">
-                            <span>
+                            <span id="assetDetailsButton">
                               <oj-bind-text>Asset Details</oj-bind-text>
                             </span>
                           </oj-button>

@@ -9,6 +9,7 @@ define([
 ], function (ko, dom, ArrayDataProvider) {
   var globalArray;
   let constructScreen = function () {
+    this.mainSectionClass = ko.observable();
     return new serviceCheckListViewModel();
   };
   class serviceCheckListViewModel {
@@ -144,6 +145,20 @@ define([
           keyAttributes: "account"
         })
       );
+    }
+
+    handleAttached(info) {
+      console.log("View is inserted");
+      console.log(info.element.innerHTML);
+      this._dom = info.element.innerHTML;
+      var x = 1;
+
+      if (x == 1) {
+        this.mainSectionClass = "ishidden";
+      }
+
+      this._doc = document.getElementById("mainSectionPanel");
+      console.log(this._doc);
     }
 
     dismiss() {
