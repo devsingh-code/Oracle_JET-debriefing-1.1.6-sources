@@ -13,6 +13,15 @@ define([
     return new serviceCheckListViewModel();
   };
   class serviceCheckListViewModel {
+    createId(invId, oscAssetId) {
+      var idArray = [];
+      idArray["assetDetailsId"] = "assetMappingBtn_" + invId + "_" + oscAssetId;
+      idArray["serviceCheckListId"] = "nextButton_" + invId + "_" + oscAssetId;
+      idArray["prevHistoryId"] = "prevHistoryDiv_" + invId + "_" + oscAssetId;
+
+      return idArray;
+    }
+
     listallAssets(ofscData) {
       var count = 1;
       var validation = false;
@@ -27,7 +36,7 @@ define([
           (value.invpool == "customer" && value.inv_aid == ofscData.activity.aid) ||
           (value.invpool == "customer" && value.inv_aid == masterAid)
         ) {
-          var invId = value.invId;
+          var invId = value.invid;
           // globalArray["selected_part_for_" + value.invid] = [];
           // globalArray["requested_part_for_" + value.invid] = [];
           var oscAssetId = value.osc_asset_id;
@@ -58,12 +67,16 @@ define([
 
           //setting color code for counter-start
           if (value.asset_verified != 1) {
-            this.assetClass = "demo-centering-box-red";
+            if (value.service_checklist_completed != 1) {
+              this.assetClass = "demo-centering-box-red";
+            }
           } else if (value.service_checklist_completed != 1) {
             this.assetClass = "demo-centering-box-yellow";
           } else {
             this.assetClass = "demo-centering-box-green";
           }
+
+          var idArray = this.createId(invId, oscAssetId);
 
           if (this.allAssetData.length == 0) {
             this.allAssetData = [
@@ -79,7 +92,10 @@ define([
                 issueType: invIssueType,
                 serviceType: invServiceType,
                 remarks: invRemarks,
-                count: count
+                count: count,
+                assetMappingButtonId: idArray[0],
+                serviceCheckListButtonId: idArray[1],
+                serviceCheckListHistoryId: idArray[2]
               }
             ];
           } else {
@@ -95,7 +111,10 @@ define([
               issueType: invIssueType,
               serviceType: invServiceType,
               remarks: invRemarks,
-              count: count
+              count: count,
+              assetMappingButtonId: idArray.assetDetailsId,
+              serviceCheckListButtonId: idArray.serviceCheckListButtonId,
+              serviceCheckListHistoryId: idArray.prevHistoryId
             });
           }
 
@@ -153,12 +172,11 @@ define([
       this._dom = info.element.innerHTML;
       var x = 1;
 
-      if (x == 1) {
-        this.mainSectionClass = "ishidden";
-      }
-
       this._doc = document.getElementById("mainSectionPanel");
-      console.log(this._doc);
+
+      if (x == 2) {
+        this._doc.classList.add("ishidden");
+      }
     }
 
     dismiss() {
