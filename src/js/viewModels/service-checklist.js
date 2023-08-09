@@ -13,6 +13,10 @@ define([
     return new serviceCheckListViewModel();
   };
   class serviceCheckListViewModel {
+    // this.assetButtonAction = function(event){
+
+    // }
+
     createId(invId, oscAssetId) {
       var idArray = [];
       idArray["assetDetailsId"] = "assetMappingBtn_" + invId + "_" + oscAssetId;
@@ -93,9 +97,9 @@ define([
                 serviceType: invServiceType,
                 remarks: invRemarks,
                 count: count,
-                assetMappingButtonId: idArray[0],
-                serviceCheckListButtonId: idArray[1],
-                serviceCheckListHistoryId: idArray[2]
+                assetMappingButtonId: idArray.assetDetailsId,
+                serviceCheckListButtonId: idArray.serviceCheckListButtonId,
+                serviceCheckListHistoryId: idArray.prevHistoryId
               }
             ];
           } else {
@@ -129,6 +133,8 @@ define([
         );
       }
     }
+
+    assetMapping(invId, oscAssetId, ofscData) {}
 
     handleActivated(info) {
       this._controller = info.valueAccessor().params.app;
@@ -167,16 +173,63 @@ define([
     }
 
     handleAttached(info) {
-      console.log("View is inserted");
-      console.log(info.element.innerHTML);
-      this._dom = info.element.innerHTML;
-      var x = 1;
+      console.log("Page is Loaded ");
+      this._controller = info.valueAccessor().params.app;
+
+      //OFSC receiveddata from Plugin
+      this.ofscData = this._controller.openData();
+      console.log(this.ofscData);
 
       this._doc = document.getElementById("mainSectionPanel");
 
-      if (x == 2) {
+      this._assetDoc = document.getElementById("assetVerifySectionPanel");
+
+      this.assetButtonAction = function (event) {
         this._doc.classList.add("ishidden");
-      }
+        this._assetDoc.classList.remove("ishidden");
+        var id = this.target.id;
+        var arr = id.split("_");
+        var invid = arr[1];
+        var assetId = arr[2];
+        this.assetMapping(invid, assetId, this.ofscData);
+      }.bind(this);
+
+      this.warrantyValue = ko.observable();
+      this.isWarrantyDisabled = ko.observable(false);
+      this.inputWarrantyDataProvider = ko.observable(
+        new ArrayDataProvider([], {
+          keyAttributes: "value"
+        })
+      );
+      this.inputBrandDataProvider = ko.observable(
+        new ArrayDataProvider([], {
+          keyAttributes: "value"
+        })
+      );
+      this.inputTypeDataProvider = ko.observable(
+        new ArrayDataProvider([], {
+          keyAttributes: "value"
+        })
+      );
+      this.inputModelDataProvider = ko.observable(
+        new ArrayDataProvider([], {
+          keyAttributes: "value"
+        })
+      );
+      this.inputSucDateValue = ko.observable();
+      this.isSucDateDisabled = ko.observable(false);
+      this.inputDeliveryDateValue = ko.observable();
+      this.isDeliverDateDisabled = ko.observable(false);
+      this.modelValue = ko.observable();
+      this.isModelDisabled = ko.observable(false);
+      this.typeValue = ko.observable();
+      this.isTypeDisabled = ko.observable(false);
+      this.brandValue = ko.observable();
+      this.isBrandDisabled = ko.observable(false);
+      this.serialNumberValue = ko.observable();
+      this.isSerialNumberDisabled = ko.observable(false);
+      this.assetTagNumberValue = ko.observable();
+      this.isAssetNumberDisabled = ko.observable(false);
     }
 
     dismiss() {

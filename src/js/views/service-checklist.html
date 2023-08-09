@@ -131,13 +131,18 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                           class="oj-flex oj-sm-flex-items-initial oj-sm-justify-center oj-sm-flex-wrap-nowrap oj-sm-padding-2x-vertical oj-md-padding-2x-vertical"
                         >
                           <div class="oj-flex-item">
-                            <oj-button :id="[[item.data.assetMappingButtonId]]" class="oj-button-sm" chroming="danger">
+                            <oj-button
+                              :id="[[item.data.assetMappingButtonId]]"
+                              on-oj-action="[[assetButtonAction]]"
+                              class="oj-button-sm"
+                              chroming="danger"
+                            >
                               <span>
                                 <oj-bind-text>Asset Details</oj-bind-text>
                               </span>
                             </oj-button>
                             <oj-button
-                              :id="[[item.data.serviceChecklistButtonId]]"
+                              :id="[[item.data.serviceCheckListButtonId]]"
                               class="oj-button-sm"
                               chroming="callToAction"
                             >
@@ -170,6 +175,69 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
         <div class="oj-sm-padding-2x-vertical oj-panel demo-mypanel">
           <div class="demo-flex-display">
             <span>This is asset verify</span>
+            <oj-form-layout
+              id="assetVerifyForm"
+              label-edge="top"
+              columns="1"
+              max-columns="1"
+              direction="row"
+              user-assistance-density="compact"
+            >
+              <oj-input-text
+                id="serialNumberInputId"
+                label-hint="Serial Number: "
+                value="{{serialNumberValue}}"
+                disabled="[[isSerialNumberDisabled]]"
+              ></oj-input-text>
+              <oj-input-text
+                id="assetTagNumberId"
+                label-hint="Asset Tag No: "
+                value="{{assetTagNumberValue}}"
+                disabled="[[isAssetNumberDisabled]]"
+              ></oj-input-text>
+              <oj-select-single
+                id="brandId"
+                label-hint="Brand: "
+                value="{{brandValue}}"
+                disabled="[[isBrandDisabled]]"
+                data="[[inputBrandDataProvider]]"
+              ></oj-select-single>
+              <oj-select-single
+                id="typeId"
+                label-hint="Type: "
+                value="{{typeValue}}"
+                disabled="[[isTypeDisabled]]"
+                data="[[inputTypeDataProvider]]"
+              ></oj-select-single>
+              <oj-select-single
+                id="modelId"
+                label-hint="Model: "
+                value="{{modelValue}}"
+                disabled="[[isModelDisabled]]"
+                data="[[inputModelDataProvider]]"
+              ></oj-select-single>
+              <oj-input-date
+                id="deliveryDateId"
+                label-hint="Delivery Date: "
+                value="{{inputDeliveryDateValue}}"
+                disabled="[[isDeliverDateDisabled]]"
+                autocomplete="off"
+              ></oj-input-date>
+              <oj-input-date
+                id="sucDateId"
+                label-hint="SUC Date: "
+                value="{{inputSucDateValue}}"
+                disabled="[[isSucDateDisabled]]"
+                autocomplete="off"
+              ></oj-input-date>
+              <oj-select-single
+                id="warrantyId"
+                label-hint="Warranty: "
+                value="{{warrantyValue}}"
+                disabled="[[isWarrantyDisabled]]"
+                data="[[inputWarrantyDataProvider]]"
+              ></oj-select-single>
+            </oj-form-layout>
           </div>
         </div>
       </div>
