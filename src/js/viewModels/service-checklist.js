@@ -4,9 +4,10 @@ define([
   "utils/dom",
   // non-referenced:
   "ojs/ojarraydataprovider",
+  "ojs/ojmutablearraydataprovider",
   "ojs/ojlistview",
   "ojs/ojbutton"
-], function (ko, dom, ArrayDataProvider) {
+], function (ko, dom, ArrayDataProvider, MutableArrayDataProvider) {
   var globalArray;
   let constructScreen = function () {
     this.mainSectionClass = ko.observable();
@@ -16,6 +17,46 @@ define([
     // this.assetButtonAction = function(event){
 
     // }
+
+    initializeobservables() {
+      this.warrantyValue = ko.observable();
+      this.isWarrantyDisabled = ko.observable(true);
+
+      this.inputWarrantyDataProvider = ko.observable(
+        new ArrayDataProvider([], {
+          keyAttributes: "value"
+        })
+      );
+      this.inputBrandDataProvider = ko.observable(
+        new ArrayDataProvider([], {
+          keyAttributes: "value"
+        })
+      );
+      this.inputTypeDataProvider = ko.observable(
+        new ArrayDataProvider([], {
+          keyAttributes: "value"
+        })
+      );
+      this.inputModelDataProvider = ko.observable(
+        new ArrayDataProvider([], {
+          keyAttributes: "value"
+        })
+      );
+      this.inputSucDateValue = ko.observable();
+      this.isSucDateDisabled = ko.observable(false);
+      this.inputDeliveryDateValue = ko.observable();
+      this.isDeliverDateDisabled = ko.observable(false);
+      this.modelValue = ko.observable();
+      this.isModelDisabled = ko.observable(false);
+      this.typeValue = ko.observable();
+      this.isTypeDisabled = ko.observable(false);
+      this.brandValue = ko.observable();
+      this.isBrandDisabled = ko.observable(false);
+      this.serialNumberValue = ko.observable();
+      this.isSerialNumberDisabled = ko.observable(true);
+      this.assetTagNumberValue = ko.observable();
+      this.isAssetNumberDisabled = ko.observable(true);
+    }
 
     createId(invId, oscAssetId) {
       var idArray = [];
@@ -134,7 +175,170 @@ define([
       }
     }
 
-    assetMapping(invId, oscAssetId, ofscData) {}
+    assetMapping(invId, oscAssetId, ofscData) {
+      var invId = invId;
+
+      var date = new Date();
+      var day = date.getDate();
+      var month = date.getMonth() + 1;
+      var year = date.getFullYear();
+      if (month < 10) month = "0" + month;
+      if (day < 10) day = "0" + day;
+      var today = year + "-" + month + "-" + day;
+
+      var invOrg =
+        ofscData.activity.activity_organization != null && ofscData.activity.activity_organization.length > 0
+          ? ofscData.activity.activity_organization
+          : "";
+      var invProject =
+        ofscData.activity.project != null && ofscData.activity.project.length > 0 ? ofscData.activity.project : "";
+      var invSite =
+        ofscData.activity.caddress != null && ofscData.activity.caddress.length > 0 ? ofscData.activity.caddress : "";
+      var invReferenceNum =
+        ofscData.activity.reference_number != null && ofscData.activity.reference_number.length > 0
+          ? ofscData.activity.reference_number
+          : "";
+
+      var invSite =
+        ofscData.activity.caddress != null && ofscData.activity.caddress.length > 0 ? ofscData.activity.caddress : "";
+
+      var invModelName =
+        ofscData.inventoryList[invId].model_name != null && ofscData.inventoryList[invId].model_name.length > 0
+          ? ofscData.inventoryList[invId].model_name
+          : "";
+      var invType =
+        ofscData.inventoryList[invId].inv_type != null && ofscData.inventoryList[invId].inv_type.length > 0
+          ? ofscData.inventoryList[invId].inv_type
+          : ""; //escalator or elevator
+      var invBlock =
+        ofscData.inventoryList[invId].inv_block != null && ofscData.inventoryList[invId].inv_block.length > 0
+          ? ofscData.inventoryList[invId].inv_block
+          : "";
+      var invFloor =
+        ofscData.inventoryList[invId].inv_floor != null && ofscData.inventoryList[invId].inv_floor.length > 0
+          ? ofscData.inventoryList[invId].inv_floor
+          : "";
+      var invNumber =
+        ofscData.inventoryList[invId].inv_number != null && ofscData.inventoryList[invId].inv_number.length > 0
+          ? ofscData.inventoryList[invId].inv_number
+          : "";
+      var invSerialNumber =
+        ofscData.inventoryList[invId].invsn != null && ofscData.inventoryList[invId].invsn.length > 0
+          ? ofscData.inventoryList[invId].invsn
+          : "";
+      var invBrand =
+        ofscData.inventoryList[invId].brand != null && ofscData.inventoryList[invId].brand.length > 0
+          ? ofscData.inventoryList[invId].brand
+          : "";
+      var invCapacity =
+        ofscData.inventoryList[invId].capacity != null && ofscData.inventoryList[invId].capacity.length > 0
+          ? ofscData.inventoryList[invId].capacity
+          : "";
+      var DeliveryDate =
+        ofscData.inventoryList[invId].delivery_date != null && ofscData.inventoryList[invId].delivery_date.length > 0
+          ? ofscData.inventoryList[invId].delivery_date
+          : "";
+      var sucDate =
+        ofscData.inventoryList[invId].suc_date != null && ofscData.inventoryList[invId].suc_date.length > 0
+          ? ofscData.inventoryList[invId].suc_date
+          : "";
+      var acType =
+        ofscData.inventoryList[invId].type != null && ofscData.inventoryList[invId].type.length > 0
+          ? ofscData.inventoryList[invId].type
+          : "";
+      var warrantyStatus =
+        ofscData.inventoryList[invId].warranty != null && ofscData.inventoryList[invId].warranty.length > 0
+          ? ofscData.inventoryList[invId].warranty
+          : "";
+      var invIssueType =
+        ofscData.inventoryList[invId].issue_type != null && ofscData.inventoryList[invId].issue_type.length > 0
+          ? ofscData.inventoryList[invId].issue_type
+          : "";
+      var invServiceType =
+        ofscData.inventoryList[invId].inv_service_type != null &&
+        ofscData.inventoryList[invId].inv_service_type.length > 0
+          ? ofscData.inventoryList[invId].inv_service_type
+          : "NA";
+      var invRemarks =
+        ofscData.inventoryList[invId].asset_remarks != null && ofscData.inventoryList[invId].asset_remarks.length > 0
+          ? ofscData.inventoryList[invId].asset_remarks
+          : "";
+      var warrantyStart =
+        ofscData.inventoryList[invId].warranty_start_date != null &&
+        ofscData.inventoryList[invId].warranty_start_date.length > 0
+          ? ofscData.inventoryList[invId].warranty_start_date
+          : "";
+      var warrantyEnd =
+        ofscData.inventoryList[invId].warranty_end_date != null &&
+        ofscData.inventoryList[invId].warranty_end_date.length > 0
+          ? ofscData.inventoryList[invId].warranty_end_date
+          : "";
+      var warrantyInfo =
+        ofscData.inventoryList[invId].inv_warranty_info != null &&
+        ofscData.inventoryList[invId].inv_warranty_info.length > 0
+          ? ofscData.inventoryList[invId].inv_warranty_info
+          : "";
+      var assetTagnumber =
+        ofscData.inventoryList[invId].inv_number != null && ofscData.inventoryList[invId].inv_number.length > 0
+          ? ofscData.inventoryList[invId].inv_number
+          : "";
+
+      this.serialNumberValue(invSerialNumber);
+      this.assetTagNumberValue(assetTagnumber);
+      var brandArray = [];
+      var typeArray = [];
+      var modelArray = [];
+      var warrantyArray = [];
+      brandArray.push({
+        value: invBrand ? invBrand : "Select Brand",
+        label: invBrand ? invBrand : "Select Brand"
+      });
+
+      this.inputBrandDataProvider(
+        new ArrayDataProvider(brandArray, {
+          keyAttributes: "value"
+        })
+      );
+
+      typeArray.push({
+        value: invType ? invType : "Select Type",
+        label: invType ? invType : "Select Type"
+      });
+      this.inputTypeDataProvider(
+        new ArrayDataProvider(typeArray, {
+          keyAttributes: "value"
+        })
+      );
+
+      modelArray.push({
+        value: invModelName ? invModelName : "Select Model",
+        label: invModelName ? invModelName : "Select Model"
+      });
+      this.inputModelDataProvider(
+        new ArrayDataProvider(modelArray, {
+          keyAttributes: "value"
+        })
+      );
+
+      warrantyArray.push({
+        value: warrantyStatus ? warrantyStatus : "Select Warranty",
+        label: warrantyStatus ? warrantyStatus : "Select Warranty"
+      });
+      this.inputWarrantyDataProvider(
+        new ArrayDataProvider(warrantyArray, {
+          keyAttributes: "value"
+        })
+      );
+
+      if (DeliveryDate != "") {
+        this.inputDeliveryDateValue(DeliveryDate);
+        this.isDeliverDateDisabled(true);
+      }
+      if (sucDate != "") {
+        this.inputSucDateValue(sucDate);
+        this.isSucDateDisabled(true);
+      }
+    }
 
     handleActivated(info) {
       this._controller = info.valueAccessor().params.app;
@@ -176,6 +380,9 @@ define([
       console.log("Page is Loaded ");
       this._controller = info.valueAccessor().params.app;
 
+      //initialize observables
+      this.initializeobservables();
+
       //OFSC receiveddata from Plugin
       this.ofscData = this._controller.openData();
       console.log(this.ofscData);
@@ -187,49 +394,12 @@ define([
       this.assetButtonAction = function (event) {
         this._doc.classList.add("ishidden");
         this._assetDoc.classList.remove("ishidden");
-        var id = this.target.id;
+        var id = event.target.id;
         var arr = id.split("_");
         var invid = arr[1];
         var assetId = arr[2];
         this.assetMapping(invid, assetId, this.ofscData);
       }.bind(this);
-
-      this.warrantyValue = ko.observable();
-      this.isWarrantyDisabled = ko.observable(false);
-      this.inputWarrantyDataProvider = ko.observable(
-        new ArrayDataProvider([], {
-          keyAttributes: "value"
-        })
-      );
-      this.inputBrandDataProvider = ko.observable(
-        new ArrayDataProvider([], {
-          keyAttributes: "value"
-        })
-      );
-      this.inputTypeDataProvider = ko.observable(
-        new ArrayDataProvider([], {
-          keyAttributes: "value"
-        })
-      );
-      this.inputModelDataProvider = ko.observable(
-        new ArrayDataProvider([], {
-          keyAttributes: "value"
-        })
-      );
-      this.inputSucDateValue = ko.observable();
-      this.isSucDateDisabled = ko.observable(false);
-      this.inputDeliveryDateValue = ko.observable();
-      this.isDeliverDateDisabled = ko.observable(false);
-      this.modelValue = ko.observable();
-      this.isModelDisabled = ko.observable(false);
-      this.typeValue = ko.observable();
-      this.isTypeDisabled = ko.observable(false);
-      this.brandValue = ko.observable();
-      this.isBrandDisabled = ko.observable(false);
-      this.serialNumberValue = ko.observable();
-      this.isSerialNumberDisabled = ko.observable(false);
-      this.assetTagNumberValue = ko.observable();
-      this.isAssetNumberDisabled = ko.observable(false);
     }
 
     dismiss() {
