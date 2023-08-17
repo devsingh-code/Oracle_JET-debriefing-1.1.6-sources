@@ -6,7 +6,8 @@ define([
   "ojs/ojarraydataprovider",
   "ojs/ojmutablearraydataprovider",
   "ojs/ojlistview",
-  "ojs/ojbutton"
+  "ojs/ojbutton",
+  "ojs/ojtable"
 ], function (ko, dom, ArrayDataProvider, MutableArrayDataProvider) {
   var globalArray;
   let constructScreen = function () {
@@ -19,6 +20,7 @@ define([
     // }
 
     initializeobservables() {
+      this.remarksValue = ko.observable();
       this.warrantyValue = ko.observable();
       this.isWarrantyDisabled = ko.observable(true);
 
@@ -42,16 +44,19 @@ define([
           keyAttributes: "value"
         })
       );
+
+      this.warrantyDataProvider = ko.observable(new ArrayDataProvider([], { keyAttributes: "type" }));
+
       this.inputSucDateValue = ko.observable();
       this.isSucDateDisabled = ko.observable(false);
       this.inputDeliveryDateValue = ko.observable();
       this.isDeliverDateDisabled = ko.observable(false);
       this.modelValue = ko.observable();
-      this.isModelDisabled = ko.observable(true);
+      this.isModelDisabled = ko.observable(false);
       this.typeValue = ko.observable();
-      this.isTypeDisabled = ko.observable(true);
+      this.isTypeDisabled = ko.observable(false);
       this.brandValue = ko.observable();
-      this.isBrandDisabled = ko.observable(true);
+      this.isBrandDisabled = ko.observable(false);
       this.serialNumberValue = ko.observable();
       this.isSerialNumberDisabled = ko.observable(true);
       this.assetTagNumberValue = ko.observable();
@@ -72,6 +77,11 @@ define([
       var validation = false;
       var assetHtml = "";
       this.allAssetData = [];
+      this.allAssetsDataProvider = ko.observable(
+        new ArrayDataProvider([], {
+          keyAttributes: "serialNo"
+        })
+      );
 
       const inventoryList = ofscData.inventoryList;
       console;
@@ -167,7 +177,7 @@ define([
         }
       }
       if (ofscData.activity.aworktype != "Preventive Maintenance") {
-        this.allAssetsDataProvider = ko.observable(
+        this.allAssetsDataProvider(
           new ArrayDataProvider(this.allAssetData, {
             keyAttributes: "serialNo"
           })
@@ -285,47 +295,55 @@ define([
 
       this.serialNumberValue(invSerialNumber);
       this.assetTagNumberValue(assetTagnumber);
-      var brandArray = [];
-      var typeArray = [];
-      var modelArray = [];
-      var warrantyArray = [];
-      brandArray.push({
-        value: invBrand ? invBrand : "Select Brand",
-        label: invBrand ? invBrand : "Select Brand"
-      });
+      this.brandArray = [
+        {
+          value: invBrand ? invBrand : "Select Brand",
+          label: invBrand ? invBrand : "Select Brand"
+        }
+      ];
+      this.typeArray = [
+        {
+          value: invType ? invType : "Select Type",
+          label: invType ? invType : "Select Type"
+        }
+      ];
+      this.modelArray = [
+        {
+          value: invModelName ? invModelName : "Select Model",
+          label: invModelName ? invModelName : "Select Model"
+        }
+      ];
+      this.warrantyArray = [
+        {
+          value: warrantyStatus ? warrantyStatus : "Select Warranty",
+          label: warrantyStatus ? warrantyStatus : "Select Warranty"
+        },
+        {
+          value: "Not in wARRANTY",
+          label: "No warranty"
+        }
+      ];
 
-      this.inputBrandDataProvider(
-        new ArrayDataProvider(brandArray, {
+      this.inputBrandDataProvider = ko.observable(
+        new ArrayDataProvider(this.brandArray, {
           keyAttributes: "value"
         })
       );
 
-      typeArray.push({
-        value: invType ? invType : "Select Type",
-        label: invType ? invType : "Select Type"
-      });
       this.inputTypeDataProvider(
-        new ArrayDataProvider(typeArray, {
+        new ArrayDataProvider(this.typeArray, {
           keyAttributes: "value"
         })
       );
 
-      modelArray.push({
-        value: invModelName ? invModelName : "Select Model",
-        label: invModelName ? invModelName : "Select Model"
-      });
       this.inputModelDataProvider(
-        new ArrayDataProvider(modelArray, {
+        new ArrayDataProvider(this.modelArray, {
           keyAttributes: "value"
         })
       );
 
-      warrantyArray.push({
-        value: warrantyStatus ? warrantyStatus : "Select Warranty",
-        label: warrantyStatus ? warrantyStatus : "Select Warranty"
-      });
       this.inputWarrantyDataProvider(
-        new ArrayDataProvider(warrantyArray, {
+        new ArrayDataProvider(this.warrantyArray, {
           keyAttributes: "value"
         })
       );
@@ -337,6 +355,84 @@ define([
       if (sucDate != "") {
         this.inputSucDateValue(sucDate);
         this.isSucDateDisabled(true);
+      }
+
+      this.generateWarrantyTable(invId, warrantyInfo, ofscData);
+      if (ofscData.inventoryList[invId].asset_shutdown == 1) {
+        this.assetShutdownValue = ko.observableArray([1]);
+      } else {
+        this.assetShutdownValue = ko.observableArray([]);
+      }
+    }
+
+    generateWarrantyTable(invId, warrantyInfo, ofscData) {
+      var substring = "NaN";
+      this.warrantyData = [];
+
+      if (warrantyInfo != "") {
+        var warrantyObj = JSON.parse(warrantyInfo);
+        if (ofscData.inventoryList[invId].brand == "Carrier" || ofscData.inventoryList[invId].brand == "Toshiba") {
+          if (warrantyObj.warranty.length > 0) {
+            for (const [key, value] of Object.entries(warrantyObj.warranty)) {
+              var date = new Date(value.w_start);
+              var date = new Date(value.w_start);
+              var day = date.getDate();
+              var month = date.getMonth() + 1;
+              var year = date.getUTCFullYear().toString().substr(-2);
+              if (month < 10) month = "0" + month;
+              if (day < 10) day = "0" + day;
+              var w_start = month + "/" + day + "/" + year;
+              if (w_start.includes(substring)) {
+                //alert("NaN");
+                w_start = "Not Available";
+              }
+              var date = new Date(value.w_end);
+              var day = date.getDate();
+              var month = date.getMonth() + 1;
+              var year = date.getUTCFullYear().toString().substr(-2);
+              if (month < 10) month = "0" + month;
+              if (day < 10) day = "0" + day;
+              var w_end = month + "/" + day + "/" + year;
+              if (w_end.includes(substring)) {
+                //alert("NaN");
+                w_end = "Not Available";
+              }
+              var wStartEnd = w_start + " - " + w_end;
+
+              var date = new Date(value.c_end);
+              var day = date.getDate();
+              var month = date.getMonth() + 1;
+              var year = date.getUTCFullYear().toString().substr(-2);
+              if (month < 10) month = "0" + month;
+              if (day < 10) day = "0" + day;
+              var c_end = month + "/" + day + "/" + year;
+              //alert(typeof(c_end));
+
+              if (c_end.includes(substring)) {
+                //alert("NaN");
+                c_end = "Not Available";
+              }
+              if (this.warrantyData.length == 0) {
+                this.warrantyData = [
+                  {
+                    type: value.type,
+                    startEnd: wStartEnd,
+                    compEnd: c_end
+                  }
+                ];
+              } else {
+                this.warrantyData.push({
+                  type: value.type,
+                  startEnd: wStartEnd,
+                  compEnd: c_end
+                });
+              }
+            }
+            this.warrantyDataProvider(new ArrayDataProvider(this.warrantyData, { keyAttributes: "type" }));
+          } else {
+            console.log("Add section for warranty not available");
+          }
+        }
       }
     }
 
@@ -400,10 +496,6 @@ define([
         var assetId = arr[2];
         this.assetMapping(invid, assetId, this.ofscData);
       }.bind(this);
-    }
-
-    dismiss() {
-      this._controller.router.go("dashboard", { historyUpdate: "replace" });
     }
   }
 

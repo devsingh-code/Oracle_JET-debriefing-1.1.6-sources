@@ -174,7 +174,6 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
       <div id="assetVerifySectionPanel" class="ishidden">
         <div class="oj-sm-padding-2x-vertical oj-panel demo-mypanel">
           <div class="demo-flex-display">
-            <span>This is asset verify</span>
             <oj-form-layout
               id="assetVerifyForm"
               label-edge="top"
@@ -237,6 +236,51 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 disabled="[[isWarrantyDisabled]]"
                 data="[[inputWarrantyDataProvider]]"
               ></oj-select-single>
+
+              <div id="warrantytableSection">
+                <oj-table
+                  id="warrantyTableId"
+                  layout="fixed"
+                  columns='[
+                  { "headerText": "Type", "field": "type", "id": "typeId" },
+                  { "headerText": "Start-End", "field": "startEnd", "id": "startEnd" },
+                  { "headerText": "Comp-End", "field": "compEnd", "id": "compEnd" }
+                ]'
+                  horizontal-grid-visible="enabled"
+                  vertical-grid-visible="enabled"
+                  data="[[warrantyDataProvider]]"
+                  class="demo-table-container oj-typography-body-sm"
+                >
+                </oj-table>
+              </div>
+
+              <oj-checkboxset
+                id="checkboxSetAssetShutdownId"
+                label-edge="inside"
+                value="{{assetShutdownValue}}"
+                required
+              >
+                <oj-option value="1">Asset Shutdown</oj-option>
+              </oj-checkboxset>
+              <oj-file-picker
+                selection-mode="multiple"
+                primary-text="Upload Images"
+                secondary-text="Choose Files to Upload"
+              ></oj-file-picker>
+
+              <oj-text-area
+                placeholder="Any additional information/findings about the unit"
+                label-hint="Remarks"
+                value="[[remarksValue]]"
+              ></oj-text-area>
+              <oj-button chroming="borderless" id="previousAssetRemarksButton" class="remarksButton">
+                Previous Asset Remarks
+              </oj-button>
+              <div
+                class="oj-flex oj-sm-justify-content-center oj-md-justify-content-center oj-lg-justify-content-center"
+              >
+                <oj-button chroming="callToAction" id="verifyButtonId" class="remarksButton"> Verify </oj-button>
+              </div>
             </oj-form-layout>
           </div>
         </div>
