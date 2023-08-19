@@ -273,7 +273,8 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
                 label-hint="Remarks"
                 value="[[remarksValue]]"
               ></oj-text-area>
-              <oj-button chroming="borderless" id="previousAssetRemarksButton" class="remarksButton">
+              <oj-button chroming="borderless" :id="[[previousRemarksId]]" class="remarksButton"
+              on-oj-action="[[modalOpener]]">
                 Previous Asset Remarks
               </oj-button>
               <div
@@ -281,6 +282,49 @@ Licensed under the Universal Permissive License v 1.0 as shown at https://oss.or
               >
                 <oj-button chroming="callToAction" id="verifyButtonId" class="remarksButton"> Verify </oj-button>
               </div>
+
+              
+              <div id="previousAssetDialogWrapper">
+                <oj-dialog id="previousAssetDialog" dialog-title="Previous Asset Remarks" aria-describedby="desc" cancel-behavior="icon">
+                  <div slot="body">
+                    <p id="previousAssetRemarksList">
+                      <oj-list-view
+                      id="previousAssetRemarksListDetail"
+                      
+                      data="[[previousAssetdataProvider]]"
+                      gridlines.item="visibleExceptLast"
+                      class="oj-listview-item-padding-off oj-sm-padding-4x-bottom">
+                      <template slot="itemTemplate" data-oj-as="item">
+                        <oj-list-item-layout>
+                          <div class="oj-flex oj-sm-flex-direction-column">
+                          <span class="oj-typography-body-sm oj-text-color-primary">
+                            <oj-bind-text >Service Date:</oj-bind-text>
+                            
+                            <oj-bind-text class="oj-typography-semi-bold"  value="[[item.data.date]]"></oj-bind-text>
+                          
+                          </span>
+                          <span slot="secondary" class="oj-typography-body-sm oj-text-color-primary">
+                            <oj-bind-text >Technician:</oj-bind-text>
+                            <oj-bind-text class="oj-typography-semi-bold" value="[[item.data.technician]]"></oj-bind-text>
+                          </span>
+                          <span class="oj-typography-body-sm oj-text-color-primary">
+                            <oj-bind-text >Asset Remarks:</oj-bind-text>
+                            <oj-bind-text class="oj-typography-semi-bold" value="[[item.data.remarks]]"></oj-bind-text>
+                          </span>
+                          <span slot="secondary" class="oj-typography-body-sm oj-text-color-primary">
+                            <oj-bind-text >Reference #:</oj-bind-text>
+                            <oj-bind-text class="oj-typography-semi-bold" value="[[item.data.ref_num]]"></oj-bind-text>
+                          </span>
+                        </div>
+                        </oj-list-item-layout>
+                      </template>
+                    </oj-list-view>
+                    </p>
+                  </div>
+                </oj-dialog>                    
+                </div>
+              </div>
+
             </oj-form-layout>
           </div>
         </div>

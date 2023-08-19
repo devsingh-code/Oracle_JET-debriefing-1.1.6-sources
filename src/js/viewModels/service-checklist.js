@@ -25,7 +25,7 @@ define([
       try {
         const response = await fetch(api_url);
         if (!response.ok) throw Error(response.message);
-        dataFromService = await response.data;
+        dataFromService = await response.json();
       } catch (error) {
         throw Error(response.message);
       }
@@ -60,6 +60,13 @@ define([
 
       this.warrantyDataProvider = ko.observable(new ArrayDataProvider([], { keyAttributes: "type" }));
 
+      this.previousAssetdataProvider = ko.observable(
+        new ArrayDataProvider([], {
+          keyAttributes: "date"
+        })
+      );
+
+      this.previousRemarksId = ko.observable();
       this.inputSucDateValue = ko.observable();
       this.isSucDateDisabled = ko.observable(false);
       this.inputDeliveryDateValue = ko.observable();
@@ -336,6 +343,9 @@ define([
           label: "No warranty"
         }
       ];
+      var id = "prevRemarks_" + oscAssetId;
+
+      this.previousRemarksId(id);
 
       this.inputBrandDataProvider = ko.observable(
         new ArrayDataProvider(this.brandArray, {
@@ -509,32 +519,50 @@ define([
         var id = event.target.id;
         var arr = id.split("_");
         var invid = arr[1];
-        assetId = arr[2];
-        this.assetMapping(invid, assetId, this.ofscData);
+        this.assetId = arr[2];
+
+        this.assetMapping(invid, this.assetId, this.ofscData);
       }.bind(this);
 
-      var previousAssetRemarksUrl =
-        this.ofscData.securedData.url + "/ofs_previous_service_history.php?action=fetch_remark&assets_id=" + assetId;
       this.modalOpener = async function (event) {
+        var id = event.target.id;
+        var arr = id.split("_");
+        this.assetId = arr[1];
+        var previousAssetRemarksUrl =
+          this.ofscData.securedData.url +
+          "/ofs_previous_service_history.php?action=fetch_remark&assets_id=" +
+          this.assetId;
         let remarksPrev = await this.fetchData(previousAssetRemarksUrl);
+        remarksPrev = remarksPrev.data.remark_history;
 
-        this.prevRemarksData = [
-          {
-            date: remarksPrev.date,
-            technician: remarksPrev.technician,
-            remarks: remarksPrev.Remarks,
-            ref_num: remarksPrev.ref_num ? remarksPrev.ref_num : "NA"
+        for (let i = 0; i < remarksPrev.length; i++) {
+          if (i == 0) {
+            this.prevRemarksData = [
+              {
+                date: remarksPrev[i].date,
+                technician: remarksPrev[i].technician,
+                remarks: remarksPrev[i].Remarks,
+                ref_num: remarksPrev[i].ref_num ? remarksPrev[i].ref_num : "NA"
+              }
+            ];
+          } else {
+            this.prevRemarksData.push({
+              date: remarksPrev[i].date,
+              technician: remarksPrev[i].technician,
+              remarks: remarksPrev[i].Remarks,
+              ref_num: remarksPrev[i].ref_num ? remarksPrev[i].ref_num : "NA"
+            });
           }
-        ];
+        }
 
-        this.previousAssetdataProvider = ko.observable(
+        this.previousAssetdataProvider(
           new ArrayDataProvider(this.prevRemarksData, {
             keyAttributes: "date"
           })
         );
 
         this._modalPanel.open();
-      };
+      }.bind(this);
     }
   }
 

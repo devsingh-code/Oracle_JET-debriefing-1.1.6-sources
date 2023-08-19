@@ -19,6 +19,19 @@ define([
 
     // }
 
+    async fetchData(endPointURL) {
+      const api_url = endPointURL;
+      let dataFromService;
+      try {
+        const response = await fetch(api_url);
+        if (!response.ok) throw Error(response.message);
+        dataFromService = await response.json();
+      } catch (error) {
+        throw Error(response.message);
+      }
+      return dataFromService;
+    }
+
     initializeobservables() {
       this.remarksValue = ko.observable();
       this.warrantyValue = ko.observable();
@@ -47,6 +60,13 @@ define([
 
       this.warrantyDataProvider = ko.observable(new ArrayDataProvider([], { keyAttributes: "type" }));
 
+      this.previousAssetdataProvider = ko.observable(
+        new ArrayDataProvider([], {
+          keyAttributes: "date"
+        })
+      );
+
+      this.previousRemarksId = ko.observable();
       this.inputSucDateValue = ko.observable();
       this.isSucDateDisabled = ko.observable(false);
       this.inputDeliveryDateValue = ko.observable();
@@ -323,6 +343,9 @@ define([
           label: "No warranty"
         }
       ];
+      var id = "prevRemarks_" + oscAssetId;
+
+      this.previousRemarksId(id);
 
       this.inputBrandDataProvider = ko.observable(
         new ArrayDataProvider(this.brandArray, {
@@ -473,6 +496,7 @@ define([
     }
 
     handleAttached(info) {
+      var assetId = "";
       console.log("Page is Loaded ");
       this._controller = info.valueAccessor().params.app;
 
@@ -487,14 +511,57 @@ define([
 
       this._assetDoc = document.getElementById("assetVerifySectionPanel");
 
+      this._modalPanel = document.getElementById("previousAssetDialog");
+
       this.assetButtonAction = function (event) {
         this._doc.classList.add("ishidden");
         this._assetDoc.classList.remove("ishidden");
         var id = event.target.id;
         var arr = id.split("_");
         var invid = arr[1];
-        var assetId = arr[2];
-        this.assetMapping(invid, assetId, this.ofscData);
+        this.assetId = arr[2];
+
+        this.assetMapping(invid, this.assetId, this.ofscData);
+      }.bind(this);
+
+      this.modalOpener = async function (event) {
+        var id = event.target.id;
+        var arr = id.split("_");
+        this.assetId = arr[1];
+        var previousAssetRemarksUrl =
+          this.ofscData.securedData.url +
+          "/ofs_previous_service_history.php?action=fetch_remark&assets_id=" +
+          this.assetId;
+        let remarksPrev = await this.fetchData(previousAssetRemarksUrl);
+        remarksPrev = remarksPrev.data.remark_history;
+
+        for (let i = 0; i < remarksPrev.length; i++) {
+          if (i == 0) {
+            this.prevRemarksData = [
+              {
+                date: remarksPrev[i].date,
+                technician: remarksPrev[i].technician,
+                remarks: remarksPrev[i].Remarks,
+                ref_num: remarksPrev[i].ref_num ? remarksPrev[i].ref_num : "NA"
+              }
+            ];
+          } else {
+            this.prevRemarksData.push({
+              date: remarksPrev[i].date,
+              technician: remarksPrev[i].technician,
+              remarks: remarksPrev[i].Remarks,
+              ref_num: remarksPrev[i].ref_num ? remarksPrev[i].ref_num : "NA"
+            });
+          }
+        }
+
+        this.previousAssetdataProvider(
+          new ArrayDataProvider(this.prevRemarksData, {
+            keyAttributes: "date"
+          })
+        );
+
+        this._modalPanel.open();
       }.bind(this);
     }
   }
